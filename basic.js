@@ -18,6 +18,11 @@ window.onload = () => {
                 latitude: e.detail.position.latitude + 0.001,
                 longitude: e.detail.position.longitude
             });
+            entity.setAttribute('position', {
+                x: 0,
+                y: 340,
+                z: 0
+            });
             document.querySelector("a-scene").appendChild(entity);
         }
         testEntityAdded = true;
