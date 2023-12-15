@@ -1,59 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravestone Stories</title>
+<html>
+    <head>
+        <title>AR.js A-Frame Location-based</title>
+        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+        <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+        <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+        <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    </head>
+    <body>
+        <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+            <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
+            <!-- <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 43.08914; longitude: -77.65823" scale="10 10 10"></a-entity>
+            <a-entity material='color: blue' geometry='primitive: sphere' gps-new-entity-place="latitude: 43.08915; longitude: -77.65823" scale="10 10 10"></a-entity> -->
+        </a-scene>
 
-    <!-- Import the library from https://ar-js-org.github.io/AR.js-Docs/ -->
-    <!-- A-Frame itself -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+        <script>
+            window.onload = () => {
+                let testEntityAdded = false;
 
-    <!-- Pure three.js code that the A-Frame components use for location-based AR -->
-    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+                const el = document.querySelector("[gps-new-camera]");
 
-    <!-- AR.js A-Frame components -->
-    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+                el.addEventListener("gps-camera-update-position", async (e) => {
+                    if(!testEntityAdded) {
+                        alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
+                        // Add a box to the north of the initial GPS position
+                        const entity = document.createElement("a-box");
+                        entity.setAttribute("scale", {
+                            x: 20, 
+                            y: 20,
+                            z: 20
+                        });
+                        entity.setAttribute('material', { color: 'red' } );
+                        entity.setAttribute('gps-new-entity-place', {
+                            latitude: e.detail.position.latitude + 0.001,
+                            longitude: e.detail.position.longitude
+                        });
+                        document.querySelector("a-scene").appendChild(entity);
 
-    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+                        // Add a sphere to the east of the initial GPS position
+                        const entity2 = document.createElement("a-sphere");
+                        entity2.setAttribute("scale", {
+                            x: 20, 
+                            y: 20,
+                            z: 20
+                        });
+                        entity2.setAttribute('material', { color: 'yellow' } );
+                        entity2.setAttribute('gps-new-entity-place', {
+                            latitude: e.detail.position.latitude,
+                            longitude: e.detail.position.longitude + 0.001
+                        });
+                        document.querySelector("a-scene").appendChild(entity2);
 
-    <!-- <script src="basic.js"></script> -->
-</head>
-<body style="margin: 0; overflow: hidden;">
-    <!-- Following tutorial from https://ar-js-org.github.io/AR.js-Docs/location-based-aframe/ -->
-    <!-- <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true' id="scene">
-        <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-        <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 43.08913; longitude: -77.65824" scale="1 1 1"></a-entity>
-    </a-scene> -->
+                        // Add a cylinder to the south of the initial GPS position
+                        const entity3 = document.createElement("a-cylinder");
+                        entity3.setAttribute("scale", {
+                            x: 20, 
+                            y: 20,
+                            z: 20
+                        });
+                        entity3.setAttribute('material', { color: 'orange' } );
+                        entity3.setAttribute('gps-new-entity-place', {
+                            latitude: e.detail.position.latitude - 0.001,
+                            longitude: e.detail.position.longitude
+                        });
+                        document.querySelector("a-scene").appendChild(entity3);
 
-    <a-scene
-        renderer="logarithmicDepthBuffer: true;"
-        embedded
-        loading-screen="enabled: false;"
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-    >
-        <a-assets>
-            <a-asset-item
-                id="animated-asset"
-                src="assets/asset.gltf"
-            ></a-asset-item>
-        </a-assets>
+                        // Add a cone to the west of the initial GPS position
+                        const entity4 = document.createElement("a-cone");
+                        entity4.setAttribute("scale", {
+                            x: 20, 
+                            y: 20,
+                            z: 20
+                        });
+                        entity4.setAttribute('material', { color: 'magenta' } );
+                        entity4.setAttribute('gps-new-entity-place', {
+                            latitude: e.detail.position.latitude,
+                            longitude: e.detail.position.longitude - 0.001
+                        });
+                        document.querySelector("a-scene").appendChild(entity4);
 
-            <a-entity
-                look-at="[gps-camera]"
-                animation-mixer="loop: repeat"
-                gltf-model="#animated-asset"
-                scale="0.5878869640116715 0.5878869640116715 0.5878869640116715"
-                gps-entity-place="latitude: 43.08913; longitude: -77.65824;"
-            ></a-entity>
+                        const compoundEntity = document.createElement("a-entity");
+                        compoundEntity.setAttribute('gps-new-entity-place', {
+                            latitude: e.detail.position.latitude + 0.001,
+                            longitude: e.detail.position.longitude + 0.001
+                        });
+                        const box = document.createElement("a-box");
+                        box.setAttribute("scale", {
+                            x: 20, 
+                            y: 20,
+                            z: 20
+                        });
+                        box.setAttribute('material', { color: 'blue' } );
+                        box.setAttribute("position",  {
+                            x: 0,
+                            y: 20,
+                            z: 0
+                        });
+                        const text = document.createElement("a-text");
+                        const textScale = 100;
+                        text.setAttribute("look-at", "[gps-new-camera]");
+                        text.setAttribute("scale", {
+                            x: textScale, 
+                            y: textScale,
+                            z: textScale
+                        });
+                        text.setAttribute("value", "Hello World");
+                        text.setAttribute("align", "center");
 
-        <a-camera gps-camera rotation-reader></a-camera>
-     </a-scene>
-
-     <script>
-
-     </script>
-</body>
+                        compoundEntity.appendChild(box);
+                        compoundEntity.appendChild(text);
+                        document.querySelector("a-scene").appendChild(compoundEntity);
+                    }
+                    testEntityAdded = true;
+                });
+            }
+        </script>
+    </body>
 </html>
