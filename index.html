@@ -23,12 +23,12 @@
 </head>
 <body style="margin: 0; overflow: hidden;">
     <!-- Following tutorial from https://ar-js-org.github.io/AR.js-Docs/location-based-aframe/ -->
-    <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true' id="scene">
+    <!-- <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true' id="scene">
         <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-        <!-- <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 43.08913; longitude: -77.65824" scale="1 1 1"></a-entity> -->
-    </a-scene>
+        <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 43.08913; longitude: -77.65824" scale="1 1 1"></a-entity>
+    </a-scene> -->
 
-    <!-- <a-scene
+    <a-scene
         renderer="logarithmicDepthBuffer: true;"
         embedded
         loading-screen="enabled: false;"
@@ -50,6 +50,10 @@
             ></a-entity>
 
         <a-camera gps-camera rotation-reader></a-camera>
-     </a-scene> -->
+     </a-scene>
+
+     <script>
+
+     </script>
 </body>
 </html>
